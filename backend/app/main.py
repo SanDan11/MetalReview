@@ -1,12 +1,15 @@
 from fastapi import FastAPI
-from .database import engine, Base
-from .routes import albums, reviews
+from .routes import albums
+from .database.db_setup import engine, Base
 
-app = FastAPI()
-Base.metadata.create_all(bind=engine)
+app = FastAPI(
+    title="Metal Review API",
+    description="An API for reviewing metal albums",
+    version="1.0.0"
+)
 
 app.include_router(albums.router)
-app.include_router(reviews.router)
+Base.metadata.create_all(bind=engine)
 
 @app.get("/")
 def root():
